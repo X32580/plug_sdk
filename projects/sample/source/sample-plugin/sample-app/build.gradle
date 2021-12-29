@@ -105,6 +105,8 @@ shadow {
             debug {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
+                managerApkConfig = new Tuple2('sample-manager-debug.apk', ':sample-manager:assembleDebug')
+
                 pluginApks {
                     pluginApk1 {
                         businessName = 'sample-plugin-app'
@@ -138,6 +140,8 @@ shadow {
             release {
                 loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
                 runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
+                managerApkConfig = new Tuple2('sample-manager-release.apk', ':sample-manager:assembleRelease')
+
                 pluginApks {
                     pluginApk1 {
                         businessName = 'sample-plugin-app'
@@ -171,8 +175,8 @@ shadow {
 
         loaderApkProjectPath = 'projects/sample/source/sample-plugin/sample-loader'
         runtimeApkProjectPath = 'projects/sample/source/sample-plugin/sample-runtime'
-
-        archiveSuffix = System.getenv("PluginSuffix") ?: ""
+        managerApkProjectPath = 'projects/sample/source/sample-manager'
+        hostManagerApkPath = 'projects/sample/source/sample-plugin/sample-app/build/generated/assets'
         archivePrefix = 'plugin'
         destinationDir = "${getRootProject().getBuildDir()}"
 

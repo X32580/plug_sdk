@@ -31,9 +31,10 @@ open class PackagePluginExtension {
 
     var loaderApkProjectPath = ""
     var runtimeApkProjectPath = ""
+    var managerApkProjectPath = ""
+    var hostManagerApkPath = "" //宿主 存放 manager 文件的路径
 
     var archivePrefix = ""
-    var archiveSuffix = ""
     var destinationDir = ""
 
     var uuid = ""

@@ -70,8 +70,7 @@ object LoadPluginBloc {
                         PackageManager.GET_ACTIVITIES
                                 or PackageManager.GET_META_DATA
                                 or PackageManager.GET_SERVICES
-                                or PackageManager.GET_PROVIDERS
-                                or PackageManager.GET_RECEIVERS
+                                or PackageManager.GET_PROVIDERS //此处有待商榷
                                 or PackageManager.GET_SIGNATURES
                 )
                         ?: throw NullPointerException("getPackageArchiveInfo return null.archiveFilePath==$archiveFilePath")

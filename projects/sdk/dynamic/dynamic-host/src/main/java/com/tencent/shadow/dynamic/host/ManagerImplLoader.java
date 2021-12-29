@@ -39,8 +39,8 @@ final class ManagerImplLoader extends ImplLoader {
 
     ManagerImplLoader(Context context, File apk) {
         applicationContext = context.getApplicationContext();
-        File root = new File(applicationContext.getFilesDir(), "ManagerImplLoader");
-        File odexDir = new File(root, Long.toString(apk.lastModified(), Character.MAX_RADIX));
+        File root = new File(applicationContext.getFilesDir(), "ManagerImplLoader");// 建立插件管理器 父目录
+        File odexDir = new File(root, Long.toString(apk.lastModified(), Character.MAX_RADIX));//建立dex 文件目录
         odexDir.mkdirs();
         installedApk = new InstalledApk(apk.getAbsolutePath(), odexDir.getAbsolutePath(), null);
     }

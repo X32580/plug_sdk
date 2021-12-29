@@ -31,6 +31,7 @@ import com.tencent.shadow.core.manager.installplugin.InstalledDao;
 import com.tencent.shadow.core.manager.installplugin.InstalledPlugin;
 import com.tencent.shadow.core.manager.installplugin.InstalledPluginDBHelper;
 import com.tencent.shadow.core.manager.installplugin.InstalledType;
+import com.tencent.shadow.core.manager.installplugin.MinFileUtils;
 import com.tencent.shadow.core.manager.installplugin.ODexBloc;
 import com.tencent.shadow.core.manager.installplugin.PluginConfig;
 import com.tencent.shadow.core.manager.installplugin.UnpackManager;
@@ -157,6 +158,19 @@ public abstract class BasePluginManager {
             File root = mUnpackManager.getAppDir();
             File oDexDir = AppCacheFolderManager.getODexDir(root, uuid);
             ODexBloc.oDexPlugin(apkFile, oDexDir, AppCacheFolderManager.getODexCopiedFile(oDexDir, partKey));
+            //在此处删除 多余的 dex  文件
+            File cleanRootDir = new File(root,"oDex");
+            File[] files = cleanRootDir.listFiles();
+            for (File f : files){
+                if (f.isDirectory()&& !f.getName().contains(uuid)){
+                    try {
+                        MinFileUtils.cleanDirectory(f);
+                        f.delete();
+                    }catch (Exception e){
+                        mLogger.error("无法删除 过期 dex 文件 "+e.getMessage());
+                    }
+                }
+            }
         } catch (InstallPluginException e) {
             if (mLogger.isErrorEnabled()) {
                 mLogger.error("oDexPlugin exception:", e);
@@ -178,6 +192,19 @@ public abstract class BasePluginManager {
             File oDexDir = AppCacheFolderManager.getODexDir(root, uuid);
             String key = type == InstalledType.TYPE_PLUGIN_LOADER ? "loader" : "runtime";
             ODexBloc.oDexPlugin(apkFile, oDexDir, AppCacheFolderManager.getODexCopiedFile(oDexDir, key));
+            //在此处删除 多余的 dex  文件
+            File cleanRootDir = new File(root,"oDex");
+            File[] files = cleanRootDir.listFiles();
+            for (File f : files){
+                if (f.isDirectory()&& !f.getName().contains(uuid)){
+                    try {
+                        MinFileUtils.cleanDirectory(f);
+                        f.delete();
+                    }catch (Exception e){
+                        mLogger.error("无法删除 过期 dex 文件 "+e.getMessage());
+                    }
+                }
+            }
         } catch (InstallPluginException e) {
             if (mLogger.isErrorEnabled()) {
                 mLogger.error("oDexPluginLoaderOrRunTime exception:", e);

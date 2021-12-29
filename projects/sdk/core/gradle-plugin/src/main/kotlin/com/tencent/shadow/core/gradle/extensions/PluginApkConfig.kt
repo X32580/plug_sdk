@@ -31,6 +31,7 @@ open class PluginApkConfig {
 
     var apkName = ""
     var apkPath = ""
+    var copyPath = ""
     var buildTask = ""
     var dependsOn: Array<String> = emptyArray()
     var hostWhiteList: Array<String> = emptyArray()

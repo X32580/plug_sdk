@@ -16,7 +16,7 @@ allprojects {
     if ("${System.env.CI}".equalsIgnoreCase("true")) {
         ext.VERSION_NAME = System.getenv("GITHUB_REF_SLUG")
     } else {
-        ext.VERSION_NAME = "local"
+        ext.VERSION_NAME = "1.0"
     }
 
     if ("${System.env.PUBLISH_RELEASE}".equalsIgnoreCase("true")) {

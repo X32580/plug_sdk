@@ -34,7 +34,9 @@ import java.util.zip.ZipFile;
 
 import static com.tencent.shadow.core.utils.Md5.md5File;
 
-
+/**
+ * 解压 插件的具体操作管理器 注意插件管理器会 在每次加载成功后删除之前的插件文件
+ */
 public class UnpackManager {
 
     private static final Logger mLogger = LoggerFactory.getLogger(UnpackManager.class);
@@ -119,12 +121,11 @@ public class UnpackManager {
                 }
             }
         }
-        MinFileUtils.cleanDirectory(pluginUnpackDir);
-
+        MinFileUtils.cleanDirectory(pluginUnpackDir); //清空解压目标目录
         ZipFile zipFile = null;
         try {
             zipFile = new SafeZipFile(target);
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();// 从zip 获取文件列表
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (!entry.isDirectory()) {
@@ -136,7 +137,7 @@ public class UnpackManager {
 
             // 外边创建完成标记
             tag.createNewFile();
-
+            deleteExpiredFiles(zipHash);
             return pluginConfig;
         } finally {
             try {
@@ -146,6 +147,29 @@ public class UnpackManager {
             } catch (IOException e) {
                 mLogger.warn("zip关闭时出错忽略", e);
             }
+        }
+    }
+
+    /**
+     * 清除 多余的文件
+     * @param zipHash
+     */
+   private void deleteExpiredFiles(String zipHash){
+        File dir = getAppDir();
+        try {   //清除多余的文件
+            File[] files = dir.listFiles();
+            if (files != null)
+                for (File f : files){
+                    if (f.isDirectory()){
+                        //不能删除将要解压的 目录 也不能删除 lib  与 oDex
+                        if (!f.getAbsolutePath().contains(zipHash) && !f.getName().contains("lib") && !f.getName().contains("oDex")){
+                            MinFileUtils.cleanDirectory(f);
+                            f.delete();
+                        }
+                    }
+                }
+        }catch (Exception e){
+            mLogger.error("无法清除目标文件 "+e.getMessage());
         }
     }
 

@@ -79,6 +79,8 @@ shadow {
             debug {
                 loaderApkConfig = new Tuple2('test-dynamic-loader-debug.apk', ':test-dynamic-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('test-dynamic-runtime-debug.apk', ':test-dynamic-runtime:assembleDebug')
+                managerApkConfig = new Tuple2('sample-manager-debug.apk', ':sample-manager:assembleDebug')
+
                 pluginApks {
                     pluginApk1 {
                         businessName = 'general-cases'
@@ -111,7 +113,8 @@ shadow {
         loaderApkProjectPath = 'projects/test/dynamic/plugin/test-dynamic-loader'
 
         runtimeApkProjectPath = 'projects/test/dynamic/plugin/test-dynamic-runtime'
-
+        managerApkProjectPath = 'projects/sample/source/sample-manager'
+        hostManagerApkPath = 'projects/sample/source/sample-plugin/sample-app/build/generated/assets'
         version = 4
         compactVersion = [1, 2, 3]
         uuidNickName = "1.1.5"

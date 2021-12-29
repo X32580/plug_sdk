@@ -54,6 +54,7 @@ shadow {
             debug {
                 loaderApkConfig = new Tuple2('loader-debug.apk', ':loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('runtime-debug.apk', ':runtime:assembleDebug')
+                managerApkConfig = new Tuple2('sample-manager-debug.apk', ':sample-manager:assembleDebug')
                 pluginApks {
                     pluginApk1 {
                         businessName = 'plugin1'
@@ -84,7 +85,8 @@ shadow {
         }
 
         loaderApkProjectPath = 'loader'
-
+        managerApkProjectPath = 'projects/sample/source/sample-manager'
+        hostManagerApkPath = 'projects/sample/source/sample-plugin/sample-app/build/generated/assets'
         runtimeApkProjectPath = 'runtime'
 
         uuid = '1234567890'
