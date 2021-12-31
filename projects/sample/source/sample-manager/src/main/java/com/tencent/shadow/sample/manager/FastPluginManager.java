@@ -20,6 +20,7 @@ package com.tencent.shadow.sample.manager;
 
 import android.content.Context;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.tencent.shadow.core.common.Logger;
 import com.tencent.shadow.core.common.LoggerFactory;
@@ -33,9 +34,11 @@ import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -55,48 +58,44 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
     }
 
 
-    public InstalledPlugin installPlugin(String zip, String hash , boolean odex) throws IOException, JSONException, InterruptedException, ExecutionException {
+    public InstalledPlugin installPlugin(String zip, String hash, boolean odex) throws IOException, JSONException, InterruptedException, ExecutionException {
         final PluginConfig pluginConfig = installPluginFromZip(new File(zip), hash);
         final String uuid = pluginConfig.UUID;
+
+        Set<String> stringList = pluginConfig.plugins.keySet();
+        Iterator<String > is = stringList.iterator();
+        while (is.hasNext()){
+            String s = is.next();
+            Log.e("答应当前插件的 路径",""+pluginConfig.plugins.get(s).file.getAbsolutePath()+"文件存在"+pluginConfig.plugins.get(s).file.exists()+"hash"+pluginConfig.plugins.get(s).hash);
+        }
+
         List<Future> futures = new LinkedList<>();
         if (pluginConfig.runTime != null && pluginConfig.pluginLoader != null) {
-            Future odexRuntime = mFixedPool.submit(new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    oDexPluginLoaderOrRunTime(uuid, InstalledType.TYPE_PLUGIN_RUNTIME,
-                            pluginConfig.runTime.file);
-                    return null;
-                }
+            Future odexRuntime = mFixedPool.submit((Callable) () -> {
+                oDexPluginLoaderOrRunTime(uuid, InstalledType.TYPE_PLUGIN_RUNTIME,
+                        pluginConfig.runTime.file);
+                return null;
             });
             futures.add(odexRuntime);
-            Future odexLoader = mFixedPool.submit(new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    oDexPluginLoaderOrRunTime(uuid, InstalledType.TYPE_PLUGIN_LOADER,
-                            pluginConfig.pluginLoader.file);
-                    return null;
-                }
+            Future odexLoader = mFixedPool.submit((Callable) () -> {
+                oDexPluginLoaderOrRunTime(uuid, InstalledType.TYPE_PLUGIN_LOADER,
+                        pluginConfig.pluginLoader.file);
+                return null;
             });
             futures.add(odexLoader);
         }
         for (Map.Entry<String, PluginConfig.PluginFileInfo> plugin : pluginConfig.plugins.entrySet()) {
             final String partKey = plugin.getKey();
             final File apkFile = plugin.getValue().file;
-            Future extractSo = mFixedPool.submit(new Callable() {
-                @Override
-                public Object call() throws Exception {
-                    extractSo(uuid, partKey, apkFile);
-                    return null;
-                }
+            Future extractSo = mFixedPool.submit((Callable) () -> {
+                extractSo(uuid, partKey, apkFile);
+                return null;
             });
             futures.add(extractSo);
             if (odex) {
-                Future odexPlugin = mFixedPool.submit(new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        oDexPlugin(uuid, partKey, apkFile);
-                        return null;
-                    }
+                Future odexPlugin = mFixedPool.submit((Callable) () -> {
+                    oDexPlugin(uuid, partKey, apkFile);
+                    return null;
                 });
                 futures.add(odexPlugin);
             }

@@ -19,6 +19,7 @@
 package com.tencent.shadow.core.manager;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -159,15 +160,15 @@ public abstract class BasePluginManager {
             File oDexDir = AppCacheFolderManager.getODexDir(root, uuid);
             ODexBloc.oDexPlugin(apkFile, oDexDir, AppCacheFolderManager.getODexCopiedFile(oDexDir, partKey));
             //在此处删除 多余的 dex  文件
-            File cleanRootDir = new File(root,"oDex");
+            File cleanRootDir = new File(root, "oDex");
             File[] files = cleanRootDir.listFiles();
-            for (File f : files){
-                if (f.isDirectory()&& !f.getName().contains(uuid)){
+            for (File f : files) {
+                if (f.isDirectory() && !f.getName().contains(uuid)) {
                     try {
                         MinFileUtils.cleanDirectory(f);
                         f.delete();
-                    }catch (Exception e){
-                        mLogger.error("无法删除 过期 dex 文件 "+e.getMessage());
+                    } catch (Exception e) {
+                        mLogger.error("无法删除 过期 dex 文件 " + e.getMessage());
                     }
                 }
             }
@@ -182,8 +183,9 @@ public abstract class BasePluginManager {
 
     /**
      * odex优化
-     * @param uuid 插件包的uuid
-     * @param type 要oDex的插件类型 @class IntalledType  loader or runtime
+     *
+     * @param uuid    插件包的uuid
+     * @param type    要oDex的插件类型 @class IntalledType  loader or runtime
      * @param apkFile 插件apk文件
      */
     public final void oDexPluginLoaderOrRunTime(String uuid, int type, File apkFile) throws InstallPluginException {
@@ -193,15 +195,15 @@ public abstract class BasePluginManager {
             String key = type == InstalledType.TYPE_PLUGIN_LOADER ? "loader" : "runtime";
             ODexBloc.oDexPlugin(apkFile, oDexDir, AppCacheFolderManager.getODexCopiedFile(oDexDir, key));
             //在此处删除 多余的 dex  文件
-            File cleanRootDir = new File(root,"oDex");
+            File cleanRootDir = new File(root, "oDex");
             File[] files = cleanRootDir.listFiles();
-            for (File f : files){
-                if (f.isDirectory()&& !f.getName().contains(uuid)){
+            for (File f : files) {
+                if (f.isDirectory() && !f.getName().contains(uuid)) {
                     try {
                         MinFileUtils.cleanDirectory(f);
                         f.delete();
-                    }catch (Exception e){
-                        mLogger.error("无法删除 过期 dex 文件 "+e.getMessage());
+                    } catch (Exception e) {
+                        mLogger.error("无法删除 过期 dex 文件 " + e.getMessage());
                     }
                 }
             }
@@ -247,8 +249,8 @@ public abstract class BasePluginManager {
     /**
      * 插件apk的so解压
      *
-     * @param uuid 插件包的uuid
-     * @param type 要oDex的插件类型 @class IntalledType  loader or runtime
+     * @param uuid    插件包的uuid
+     * @param type    要oDex的插件类型 @class IntalledType  loader or runtime
      * @param apkFile 插件apk文件
      */
     public final void extractLoaderOrRunTimeSo(String uuid, int type, File apkFile) throws InstallPluginException {
@@ -330,13 +332,18 @@ public abstract class BasePluginManager {
     /**
      * 获取插件应该采用的ABI
      * <p>
-     * 对系统来说插件代码是系统的一部分，所以插件只能用跟宿主一样ABI的so。
-     * 这里查询宿主安装后系统自动决定的ABI目录，而不是Build.SUPPORTED_ABIS，因为宿主可能采用了兼容模式的ABI。
+     *  获取系统优先支持的ABI 如果是21以下则使用 armeabi
      */
     private String getAbi() {
-        String nativeLibraryDir = mHostContext.getApplicationInfo().nativeLibraryDir;
-        int nextIndexOfLastSlash = nativeLibraryDir.lastIndexOf('/') + 1;
-        return nativeLibraryDir.substring(nextIndexOfLastSlash);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String[] abis = Build.SUPPORTED_ABIS;
+            return abis[0];
+        } else {
+            return "armeabi";
+        }
+        //        String nativeLibraryDir = mHostContext.getApplicationInfo().nativeLibraryDir;
+        //        int nextIndexOfLastSlash = nativeLibraryDir.lastIndexOf('/') + 1;
+        //        return nativeLibraryDir.substring(nextIndexOfLastSlash);
     }
 
     /**

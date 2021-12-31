@@ -85,7 +85,6 @@ open class ShadowPluginHelper {
             val packagePlugin = project.extensions.findByName("packagePlugin")
             val extension = packagePlugin as PackagePluginExtension
             val managerApkName :String = buildType.managerApkConfig.first
-            println("build Type Config ${buildType.managerApkConfig} ")
             val splitList = buildType.managerApkConfig.second.split(":")
             val modelName = splitList[1]
             val managerFileParent =
@@ -150,7 +149,7 @@ open class ShadowPluginHelper {
             }
 
             if (!file.exists())
-                file.mkdir()
+                file.mkdirs()
 
             val copyFile = File(
                 "${project.rootDir}" +
@@ -192,7 +191,7 @@ open class ShadowPluginHelper {
             }
 
             if (!file.exists())
-                file.mkdir()
+                file.mkdirs()
 
             val copyFile = File(
                 "${project.rootDir}" +
@@ -222,12 +221,13 @@ open class ShadowPluginHelper {
 
             val pluginFile = File(project.rootDir, pluginConfig.apkPath)
             val file = File( "${project.rootDir.absolutePath}/${pluginConfig.copyPath}")
+
             if (!pluginFile.exists() && !file.exists()) {
-                throw IllegalArgumentException(pluginFile.absolutePath + " , plugin file not exist...--拷贝 plugin 文件失败 请先打包插件后操作")
+                throw IllegalArgumentException(" plugin"+pluginFile.absolutePath + " , plugin file not exist...--拷贝 plugin 文件失败 请先打包插件后操作")
             }
 
             if (!file.exists())
-                file.mkdir()
+                file.mkdirs()
 
             val copyFile = File("${project.rootDir.absolutePath}/${pluginConfig.copyPath}/${pluginConfig.apkName}")
             if (pluginFile.exists()) { //有新的 插件apk 文件更新插件 拷贝文件
@@ -240,7 +240,7 @@ open class ShadowPluginHelper {
                 println("没有找到 plugin 文件更新包 本次构建 plugin copy file 插件未更新")
             }
 
-            println("copy plugin file $pluginFile to = $copyFile")
+            println("copy plugin file to = $copyFile")
 
         }
 
@@ -284,7 +284,7 @@ open class ShadowPluginHelper {
             if (checkExist && !pluginFile.exists()) {
                 throw IllegalArgumentException(pluginFile.absolutePath + " , plugin file not exist...")
             }
-            println("pluginFile path = $pluginFile")
+            println("pluginFile path = $pluginFile ")
             return pluginFile
         }
     }

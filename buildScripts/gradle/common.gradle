@@ -14,9 +14,9 @@ allprojects {
     ext.VERSION_CODE = 1
 
     if ("${System.env.CI}".equalsIgnoreCase("true")) {
-        ext.VERSION_NAME = System.getenv("GITHUB_REF_SLUG")
+        ext.VERSION_NAME = "1.1-debug"
     } else {
-        ext.VERSION_NAME = "1.0"
+        ext.VERSION_NAME = "1.1"
     }
 
     if ("${System.env.PUBLISH_RELEASE}".equalsIgnoreCase("true")) {
@@ -26,15 +26,11 @@ allprojects {
     } else {
         ext.VERSION_SUFFIX = "-${gitShortRev()}-SNAPSHOT"
     }
-    ext.ARTIFACT_VERSION = ext.VERSION_NAME + ext.VERSION_SUFFIX
-    ext.TEST_HOST_APP_APPLICATION_ID = 'com.tencent.shadow.test.hostapp'
-    ext.SAMPLE_HOST_APP_APPLICATION_ID = 'com.tencent.shadow.sample.host'
+    ext.ARTIFACT_VERSION = "1.2"// 发布的版本号
+    ext.TEST_HOST_APP_APPLICATION_ID = 'com.sinepow.shadow.test.hostapp'
+    ext.SAMPLE_HOST_APP_APPLICATION_ID = 'com.sinepow.shadow.sample.host'
     repositories {
-        if (!System.getenv().containsKey("DISABLE_TENCENT_MAVEN_MIRROR")) {
-            maven { url 'https://mirrors.tencent.com/nexus/repository/maven-public/' }
-        } else {
-            google()
-            jcenter()
-        }
+        google()
+        jcenter()
     }
 }

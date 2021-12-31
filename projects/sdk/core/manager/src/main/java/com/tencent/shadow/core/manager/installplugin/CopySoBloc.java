@@ -64,6 +64,7 @@ public class CopySoBloc {
             try {
                 zipFile = new SafeZipFile(apkFile);
                 Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                mLogger.error("filter = "+filter);
                 while (entries.hasMoreElements()) {
                     ZipEntry entry = entries.nextElement();
                     if (entry.getName().startsWith(filter)) {

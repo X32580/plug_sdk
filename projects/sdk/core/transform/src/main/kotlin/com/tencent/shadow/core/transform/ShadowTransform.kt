@@ -34,8 +34,8 @@ class ShadowTransform(
         const val SelfClassNamePlaceholder =
             "com.tencent.shadow.core.transform.SelfClassNamePlaceholder"
         const val DimensionName = "Shadow"
-        const val NoShadowTransformFlavorName = "normal"
-        const val ApplyShadowTransformFlavorName = "plugin"
+        const val NoShadowTransformFlavorName = "normal" //普通的apk文件 可以直接运行
+        const val ApplyShadowTransformFlavorName = "plugin" //转换过的 插件话apk 无法直接安装运行
     }
 
     lateinit var _mTransformManager: TransformManager
