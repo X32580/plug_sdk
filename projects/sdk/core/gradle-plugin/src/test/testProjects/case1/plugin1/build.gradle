@@ -15,7 +15,7 @@ buildscript {
 
 plugins {
     id 'com.android.application'
-    id 'com.tencent.shadow.plugin'
+    id 'com.sinepow.shadow.plugin'
 }
 
 allprojects {

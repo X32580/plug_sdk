@@ -38,6 +38,7 @@ task testSdk() {
 
 apply plugin: 'maven-publish'
 
+
 static def getDependencyNode(scope, groupId, artifactId, version) {
     Node node = new Node(null, 'dependency')
     node.appendNode('groupId', groupId)
@@ -406,40 +407,25 @@ publishing {
         }
     }
     repositories {
-        def useLocalCredential = false
-        Properties properties = new Properties()
-        def propertiesFile = project.rootProject.file('local.properties')
-        if (propertiesFile.exists()) {
-            properties.load(propertiesFile.newDataInputStream())
 
-            if ("${properties.getProperty('gpr.local')}".equalsIgnoreCase('true')) {
-                def user = properties.getProperty('gpr.user')
-                def key = properties.getProperty('gpr.key')
-                maven {
-                    name = "GitHubPackages"
-                    credentials {
-                        username = user
-                        password = key
-                    }
-                    url "https://maven.pkg.github.com/${user}/shadow"
-                }
+        def publishBoolean = false
 
-                useLocalCredential = true
-            }
-        }
-
-        if (!useLocalCredential && "${System.env.CI}".equalsIgnoreCase("true")) {
+        if (publishBoolean){
+            println("发布到Github依赖")
             maven {
                 name = "GitHubPackages"
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
+                    username = "X32580"
+                    password = "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"
                 }
-                url "https://maven.pkg.github.com/" + "${System.env.GITHUB_REPOSITORY}".toLowerCase()
+                url "https://maven.pkg.github.com/X32580/plug_sdk"
             }
-        } else {
+            mavenLocal() //发布到 Github 的同时更新本地代码
+        }else {
+            println("发布到本地 依赖")
             mavenLocal()
         }
+
     }
 }
 

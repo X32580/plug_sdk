@@ -220,7 +220,7 @@ open class ShadowPluginHelper {
         ) {
 
             val pluginFile = File(project.rootDir, pluginConfig.apkPath)
-            val file = File( "${project.rootDir.absolutePath}/${pluginConfig.copyPath}")
+            val file = File( "${project.rootDir.absolutePath}/${pluginConfig.copyDirPath}")
 
             if (!pluginFile.exists() && !file.exists()) {
                 throw IllegalArgumentException(" plugin"+pluginFile.absolutePath + " , plugin file not exist...--拷贝 plugin 文件失败 请先打包插件后操作")
@@ -229,7 +229,7 @@ open class ShadowPluginHelper {
             if (!file.exists())
                 file.mkdirs()
 
-            val copyFile = File("${project.rootDir.absolutePath}/${pluginConfig.copyPath}/${pluginConfig.apkName}")
+            val copyFile = File("${project.rootDir.absolutePath}/${pluginConfig.copyDirPath}/${pluginConfig.apkName}")
             if (pluginFile.exists()) { //有新的 插件apk 文件更新插件 拷贝文件
                 println("更新 plugin copy file  $copyFile")
                 if (copyFile.exists())
@@ -279,8 +279,12 @@ open class ShadowPluginHelper {
 
         }
 
+        /**
+         *  build outputs 文件夹会在打包时 删除文件会导致无法获取文件
+         *  所以 获取插件文件 改为拷贝后的文件
+         */
         fun getPluginFile(project: Project, pluginConfig: PluginApkConfig, checkExist: Boolean): File {
-            val pluginFile = File(project.rootDir, pluginConfig.apkPath)
+            val pluginFile = File("${project.rootDir.absolutePath}/${pluginConfig.copyDirPath}/${pluginConfig.apkName}") //插件文件 从out文件获取无法保证安全
             if (checkExist && !pluginFile.exists()) {
                 throw IllegalArgumentException(pluginFile.absolutePath + " , plugin file not exist...")
             }

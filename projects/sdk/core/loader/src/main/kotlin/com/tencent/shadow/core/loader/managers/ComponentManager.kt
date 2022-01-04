@@ -22,6 +22,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
+import android.util.Log
 import android.util.Pair
 import com.tencent.shadow.coding.java_build_config.BuildConfig
 import com.tencent.shadow.core.loader.infos.ContainerProviderInfo

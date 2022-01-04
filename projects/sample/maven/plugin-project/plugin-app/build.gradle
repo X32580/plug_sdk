@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.tencent.shadow.plugin'
+apply plugin: 'com.sinepow.shadow.plugin'
 
 android {
     compileSdkVersion 30

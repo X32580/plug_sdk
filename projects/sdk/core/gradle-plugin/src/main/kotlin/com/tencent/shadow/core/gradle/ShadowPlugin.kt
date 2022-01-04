@@ -95,7 +95,7 @@ class ShadowPlugin : Plugin<Project> {
                 it.isDefault = false
             }
         } catch (e: InvalidUserDataException) {
-            throw Error("请在android{} DSL之前apply plugin: 'com.tencent.shadow.plugin'", e)
+            throw Error("请在android{} DSL之前apply plugin: 'com.tencent.sinepow.plugin'", e)
         }
     }
 

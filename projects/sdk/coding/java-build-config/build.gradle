@@ -5,7 +5,6 @@ import com.squareup.javapoet.TypeSpec
 import javax.lang.model.element.Modifier
 
 apply plugin: 'java'
-
 buildscript {
     repositories {
         if (!System.getenv().containsKey("DISABLE_TENCENT_MAVEN_MIRROR")) {
